@@ -1,4 +1,5 @@
-#import en_core_web_sm
+import en_core_web_sm
+#import en_core_web_trf
 import pickle
 import pandas as pd
 from spacy.scorer import Scorer
@@ -6,9 +7,14 @@ from spacy.tokens import Doc
 from spacy.training.example import Example
 import spacy
 import ast
+import re
 
 class model_to_evaluate:
     def __init__(self):
+        #if spacy.prefer_gpu():
+        #    print("Using GPU")
+        #else:
+        #    print("Using CPU")
         self.data = None
         self.nlp = None
         self.labelname = ""
@@ -18,7 +24,7 @@ class model_to_evaluate:
 
     def load_model(self, path_to_model, is_selftrained): # Spacy (PERSON), custom (PER_CUSTOM)
         # Load trained model
-        if (is_selftrained):
+        if is_selftrained:
             with open(path_to_model, "rb") as f:
                 self.nlp = pickle.load(f)
             self.labelname = "PER_CUSTOM"
@@ -37,6 +43,8 @@ class model_to_evaluate:
         scorer = Scorer()
         example = []
         for sentence, entity in zip(self.data["sentence"], self.data["label"]):
+            if self.labelname == "PERSON":
+                entity = re.sub("PER_CUSTOM", "PERSON", entity)
             pred = self.nlp(sentence)
             newCommentsNLP.append(pred)
             doc = self.nlp.make_doc(sentence)
