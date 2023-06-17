@@ -7,16 +7,21 @@ from spacy.training import Example
 import json
 import pickle
 
+
+
 class custom_model:
     def __init__(self):
+        if spacy.prefer_gpu():
+            print("Using GPU")
+        else:
+            print("Using CPU")
         self.data = None
         self.model = None
-
 
     def __create_pipeline(self, model_architecture):
         model = None
         if model is not None:
-            if (model_architecture == "standard"):
+            if model_architecture == "standard":
                 nlp = spacy.load(model)
             else:
                 nlp = spacy.load(model, enable=["transformers"])
@@ -25,7 +30,7 @@ class custom_model:
             nlp = spacy.blank("en")
             print("Created blank 'en' model")
         if 'ner' not in nlp.pipe_names:
-            if (model_architecture == "transformer"):
+            if model_architecture == "transformer":
                 nlp.add_pipe("transformer")
             ner = nlp.add_pipe("ner")
         else:
@@ -70,8 +75,8 @@ class custom_model:
         ner, nlp = self.__create_pipeline(model_architecture)
         n_iter = iterations
         loss_graph_list = []
-        #test = nlp.pipe_names
-        if (model_architecture == "standard"):
+
+        if model_architecture == "standard":
             other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "ner"]
             with nlp.disable_pipes(other_pipes):
                 optimizer = nlp.begin_training()
