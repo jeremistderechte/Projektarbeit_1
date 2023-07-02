@@ -11,10 +11,10 @@ import re
 
 class model_to_evaluate:
     def __init__(self):
-        #if spacy.prefer_gpu():
-        #    print("Using GPU")
-        #else:
-        #    print("Using CPU")
+        if spacy.prefer_gpu():
+            print("Using GPU")
+        else:
+            print("Using CPU")
         self.data = None
         self.nlp = None
         self.labelname = ""
