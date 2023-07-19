@@ -1,6 +1,6 @@
 # Projektarbeit_1
 
-Custom NER Model via spaCy with a neural network and a transformer approach
+Custom NER Model via spaCy with a SVM and a transformer approach
 
 
 # Transformer on CPU (slow and computationally expensive)
